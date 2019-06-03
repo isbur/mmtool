@@ -1,0 +1,30 @@
+{
+
+  "manifest_version": 2,
+  "name": "MMTool",
+  "version": "0.1",
+
+  "description": "Implements workflow for wiki based notes making",
+  "icons": {
+	"96": "icons/logo_mm_96.ico",
+    "48": "icons/logo_mm_48.ico"
+	
+  },
+  
+	"permissions": [
+		"notifications",
+		"activeTab"
+	],
+  
+  "browser_action": {
+    "default_icon": "icons/logo_mm_32.ico",
+    "default_title": "MMTool",
+    "default_popup": "popup/turn_on_turn_off.html"
+  },
+  
+  "background":{
+	"scripts":["bgscripts/main.js"]
+  }
+  
+  
+}
