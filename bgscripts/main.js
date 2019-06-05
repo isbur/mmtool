@@ -1,28 +1,14 @@
-browser.notifications.create({
-    "type": "basic",
-    "title": "You clicked a link!",
-    "message": "Main.js is loaded!"
-  })
+console.log("test my nuts");
 
-browser.runtime.onMessage.addListener(notify);
 
-function notify(message) {
-  browser.notifications.create({
-    "type": "basic",
-    "iconUrl": browser.extension.getURL("link.png"),
-    "title": "You clicked a link!",
-    "message": message.url
-  });
-}
-/*
-(
-	function() {
-		alert("The bgscript is loaded")
-		browser.runtime.onMessage(
-			(message) => {
-				console.log("Some message was received")
-			}
-		)
+browser.runtime.onMessage.addListener(
+	(message) => {
+		console.log("Some message was received");
+		if (message.command === "start") {
+			console.log("Starting scripts...")
+		}
+		else if (message.command === "stop") {
+			console.log("Stoping scripts...")
+		}
 	}
 )
-*/
