@@ -1,7 +1,7 @@
 import './mediawiki-wrapper.js'
 
-MWBot = require('mwbot');
-let bot = new MWBot();
+//MWBot = require('mwbot');
+//let bot = new MWBot();
 
 
 console.log("test my nuts");
