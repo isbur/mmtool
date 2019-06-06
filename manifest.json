@@ -13,8 +13,13 @@
   
 	"permissions": [
 		"notifications",
-		"activeTab"
+		"activeTab",
+		"contextMenus",
+		"menus",
+		"menus.overrideContext"
 	],
+	
+	"content_security_policy": "script-src 'self' https://*.wikipedia.org https://ru.wikiversity.org; object-src 'self' https://*.wikipedia.org",
   
   "browser_action": {
     "default_icon": "icons/logo_mm_32.ico",
@@ -23,8 +28,24 @@
   },
   
   "background":{
-	"scripts":["bgscripts/main.js"]
-  }
+	"scripts":[
+		"bgscripts/main.js",
+		"bgscripts/mediawiki-wrapper.js"
+	]
+  },
+  
+	"commands": {
+		"toggleCreateOrAddCard": {
+			"suggested_key": {
+				"default": "Alt+M"
+			}
+		},
+		"finishCurrentCard": {
+			"suggested_key": {
+				"default": "Alt+Shift+M"
+			}
+		}
+	}
   
   
 }
