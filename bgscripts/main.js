@@ -1,47 +1,39 @@
-import './mediawiki-wrapper.js'
+import './jquery-3.4.1.js'
 
-//MWBot = require('mwbot');
-//let bot = new MWBot();
+const apiUrl = "https://ru.wikiversity.org/w/api.php";
+const userName = "Isbur@mmtool";
+const password = "sf5vmfng5e1gp1hoi17jf9hpc5d9ddpq"
 
 
 console.log("test my nuts");
-
-
-var mwjs = MediaWikiJS({baseURL: 'https://ru.wikiversity.org', apiPath: '/w/api.php'});
 
 
 var jswikibot = {
 	
 	
 	login: function(){
-		/*
-		mwjs.send(
-			{
-				action: 'query',
-				meta: 'tokens',
-				type: 'login',
-				origin: '
-			},
-			function(data){
-				console.log(data)
-				var logintoken = data.query.tokens.logintoken
-			}
-		);
-		*/
 		
-		var logintoken = "16163ef86a4b52b2cb735722c68f499f5cf8fdff+\\"
-		
-		mwjs.send(
-			{
-				action: 'login',
-				lgname: 'Isbur@mmtool',
-				lgpassword: 'sf5vmfng5e1gp1hoi17jf9hpc5d9ddpq',
-				lgtoken: logintoken
-			},
-			function(data){
+		var logintoken = "foo";
+		$.ajax({
+			type: "GET",
+			url: apiUrl,
+			data: {action: "query", format: "json", meta: "tokens", type: "login"},
+			dataType: "json",
+			success: function(data){
 				console.log(data);
+				logintoken = data.query.tokens.logintoken;
+				$.ajax({
+					type: "POST",
+					url: apiUrl,
+					data: {action: "login", format: "json", lgname: userName, lgpassword: password, lgtoken: logintoken},
+					dataType: "json",
+					success: function(data){
+						console.log(data);
+					}
+				})
 			}
-		)
+		})
+		
 		
 	},
 	
@@ -58,6 +50,9 @@ var jswikibot = {
 		
 	}
 }
+
+
+jswikibot.login()
 
 
 var MMTool = {
