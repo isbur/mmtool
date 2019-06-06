@@ -1,0 +1,2 @@
+browserify .\main.js > ./main_bundled_pre.js
+Get-Content .\main_bundled_pre.js | Set-Content -Encoding utf8 .\main_bundled.js

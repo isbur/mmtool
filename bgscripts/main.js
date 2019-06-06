@@ -1,13 +1,30 @@
-import './mediawiki-wrapper.js'
-
-//MWBot = require('mwbot');
-//let bot = new MWBot();
+var bot = require('nodemw');
 
 
 console.log("test my nuts");
 
 
-var mwjs = MediaWikiJS({baseURL: 'https://ru.wikiversity.org', apiPath: '/w/api.php'});
+var client = new bot({
+    protocol: 'https',           // Wikipedia now enforces HTTPS
+    server: 'en.wikipedia.org',  // host name of MediaWiki-powered site
+    path: '/w',                  // path to api.php script
+    debug: true                 // is more verbose when set to true
+  });
+  
+client.getArticle('Main_page', function(err, data) {
+    // error handling
+    if (err) {
+      console.error(err);
+      return;
+    }
+
+    // ...
+	
+	console.log(data);
+	
+  });
+
+
 
 
 var jswikibot = {
