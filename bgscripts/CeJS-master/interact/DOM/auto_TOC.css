@@ -1,0 +1,173 @@
+/* --------------------------------- */
+
+/*
+
+CSS for CeL.interact.DOM.auto_TOC().
+
+*/
+
+/* --------------------------------- */
+
+/* 目錄 box */
+.TOC_box, .TOC_box_no_sticky {
+	color: #840;
+	background-color: #def;
+	width: 40%;
+	min-width: 20em;
+	max-width: 99%;
+	margin-left: 3em !important;
+	margin-top: 1em !important;
+	margin-bottom: .5em;
+	border: 1px solid #34F !important;
+	border-radius: .5em;
+	z-index: 20;
+	/* for float */
+	margin-right: .5em;
+	top: -.2em;
+}
+
+.TOC_box {
+	/* https://developer.mozilla.org/en-US/docs/Web/CSS/position */
+	position: -webkit-sticky;
+	position: sticky;
+}
+
+.TOC_control, .TOC_position_control {
+	margin: .3em;
+}
+
+.TOC_control, .TOC_position_control>span {
+	cursor: pointer;
+}
+
+/* 設定目錄之 position 為 static 或 relative / float 為左右邊的 controller。 */
+.TOC_position_control {
+	float: right;
+	margin-right: .5em;
+}
+
+/* 展開/收合目錄之 controller */
+.TOC_control {
+	background-color: #eef;
+	border-radius: .5em;
+	/*
+	color: #FF0080;
+	quotes: " [" "]";
+	*/
+}
+
+/* 目錄列表 box */
+.TOC_list {
+	margin: .5em;
+	margin-right: 1em;
+	display: none;
+	margin-top: .3em;
+	min-height: 2em;
+	/* for contents too long */
+	max-width: 98%;
+	overflow-y: auto;
+	resize: both;
+}
+
+/* 目錄列表過長時".."部分 */
+.TOC_more {
+	font-weight: bold;
+	color: #666;
+}
+
+/* --------------------------------- */
+
+/* 目錄列表各項目皆具有之 CSS */
+
+/* TODO: 用 clip */
+.TOC_header a {
+	display: inline-block;
+	text-indent: -1em;
+	padding-left: 1.3em;
+	border-left: 2pt solid;
+	margin-top: .3em;
+	line-height: 1.3em;
+}
+
+.TOC_header a:hover {
+	background-color: #fbd;
+}
+
+/* --------------------------------- */
+
+/* 目錄列表中針對各標題對應之 CSS */
+.TOC_h1 a {
+	background-color: #fae;
+}
+
+.TOC_h1 a:link {
+	color: #927;
+}
+
+.TOC_h2 a {
+	margin-left: 1em;
+}
+
+.TOC_h2 a:link {
+	color: #42a;
+}
+
+.TOC_h3 a {
+	margin-left: 2em;
+}
+
+.TOC_h3 a:link {
+	color: #2a6;
+}
+
+.TOC_h4 a {
+	margin-left: 3em;
+}
+
+.TOC_h5 a {
+	margin-left: 3.5em;
+}
+
+.TOC_h6 a {
+	margin-left: 4em;
+}
+
+/* --------------------------------- */
+
+/* 文內標題使用 */
+.TOC_head {
+	font-family: '標楷體';
+}
+
+/* 標題之"↑回到目錄" */
+.TOC_back {
+	float: right;
+	font-size: .6em;
+	font-weight: lighter;
+	/* quotes: "[" "]"; */
+	quotes: none;
+	/*
+	IE, Opera: use the unSelectable attribute
+	http://help.dottoro.com/lcrlukea.php
+	*/
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+/* --------------------------------- */
+
+/* 展開/收合目錄之 controller、"↑回到目錄"之 quote */
+/*
+.TOC_control:before,
+*/
+.TOC_back:before {
+	content: open-quote;
+}
+
+/*
+.TOC_control:after,
+*/
+.TOC_back:after {
+	content: close-quote;
+}

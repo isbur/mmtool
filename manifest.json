@@ -19,7 +19,7 @@
 		"menus.overrideContext"
 	],
 	
-	"content_security_policy": "script-src 'self' https://*.wikipedia.org https://ru.wikiversity.org; object-src 'self' https://*.wikipedia.org",
+	"content_security_policy": "script-src 'self' 'unsafe-eval' https://*.wikipedia.org https://ru.wikiversity.org; object-src 'self' https://*.wikipedia.org",
   
   "browser_action": {
     "default_icon": "icons/logo_mm_32.ico",
@@ -28,10 +28,7 @@
   },
   
   "background":{
-	"scripts":[
-		"bgscripts/main.js",
-		"bgscripts/mediawiki-wrapper.js"
-	]
+	"page": "bgscripts/bgpage.html"
   },
   
 	"commands": {
