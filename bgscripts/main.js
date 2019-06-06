@@ -1,28 +1,16 @@
-var bot = require('nodemw');
+var MediaWiki = require("mediawiki");
+var bot = new MediaWiki.Bot();
 
+bot.settings.endpoint = "https://ru.wikiversity.org/w/api.php";
+bot.settings.rate = 60e3 / 10;
+bot.settings.userAgent = "ExampleBot <https://en.wiktionary.org/wiki/User:Example>";
+bot.settings.byeline = "(example bot edit)";
 
 console.log("test my nuts");
 
 
-var client = new bot({
-    protocol: 'https',           // Wikipedia now enforces HTTPS
-    server: 'en.wikipedia.org',  // host name of MediaWiki-powered site
-    path: '/w',                  // path to api.php script
-    debug: true                 // is more verbose when set to true
-  });
-  
-client.getArticle('Main_page', function(err, data) {
-    // error handling
-    if (err) {
-      console.error(err);
-      return;
-    }
 
-    // ...
-	
-	console.log(data);
-	
-  });
+
 
 
 
@@ -32,34 +20,38 @@ var jswikibot = {
 	
 	login: function(){
 		/*
-		mwjs.send(
-			{
-				action: 'query',
-				meta: 'tokens',
-				type: 'login',
-				origin: '
-			},
-			function(data){
-				console.log(data)
-				var logintoken = data.query.tokens.logintoken
-			}
-		);
+		// get login token
+		var request = bot.get({
+			action: "query",
+			meta: "tokens",
+			type: "login"
+		});
+
+		var logintoken="foo";
+		request.complete(function (response) {
+			console.log(response);
+			logintoken = response.query.tokens.logintoken;
+			console.log(logintoken);
+		});
+		
+		
+		// login
+		var request = bot.post({
+			action: 'login',
+			lgname: 'Isbur@mmtool',
+			lgpassword: 'sf5vmfng5e1gp1hoi17jf9hpc5d9ddpq',
+			lgtoken: logintoken
+		});
+		
+		request.complete(function (response) {
+			console.log(response);
+		});	
 		*/
-		
-		var logintoken = "16163ef86a4b52b2cb735722c68f499f5cf8fdff+\\"
-		
-		mwjs.send(
-			{
-				action: 'login',
-				lgname: 'Isbur@mmtool',
-				lgpassword: 'sf5vmfng5e1gp1hoi17jf9hpc5d9ddpq',
-				lgtoken: logintoken
-			},
-			function(data){
-				console.log(data);
-			}
-		)
-		
+		const user = "Isbur@mmtool";
+		const password = "sf5vmfng5e1gp1hoi17jf9hpc5d9ddpq"
+		bot.login(user, password).complete(function (username) {
+			console.log("Logged in as " + username);
+		});
 	},
 	
 	
@@ -75,6 +67,9 @@ var jswikibot = {
 		
 	}
 }
+
+
+jswikibot.login();
 
 
 var MMTool = {

@@ -12,6 +12,7 @@
   },
   
 	"permissions": [
+		"*://ru.wikiversity.org/*",
 		"notifications",
 		"activeTab",
 		"contextMenus",
