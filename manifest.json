@@ -28,9 +28,14 @@
     "default_popup": "popup/turn_on_turn_off.html"
   },
   
-  "background":{
-	"page": "bgscripts/bgpage.html"
-  },
+	"background":{
+		"page": "bgscripts/bgpage.html"
+	},
+	
+	"content_scripts": [{
+		"matches":["https://ru.wikiversity.org/*"],
+		"js":["cscripts/selectioneer.js"]
+	}],
   
 	"commands": {
 		"toggleCreateOrAddCard": {

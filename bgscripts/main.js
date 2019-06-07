@@ -3,9 +3,13 @@ import './jquery-3.4.1.js'
 const apiUrl = "https://ru.wikiversity.org/w/api.php";
 const userName = "Isbur@mmtool";
 const password = "sf5vmfng5e1gp1hoi17jf9hpc5d9ddpq"
+const baseWikiPage = "Участник:Isbur/Комплексный анализ II/Карточки/"
 
 
 console.log("test my nuts");
+var selObj = document.getSelection();
+console.log(selObj);
+console.log("oh they're sweet")
 
 
 var jswikibot = {
@@ -40,9 +44,49 @@ var jswikibot = {
 	
 	createCard: function(){
 		
-		mwjs.send({action: 'edit', page: 'Участник:Isbur', appendtext: 'wikitext'}, function (data) {
-					console.log(data);
-		});
+		$.ajax({
+			type: "GET",
+			url: apiUrl,
+			data: {action: "query", format: "json", meta: "tokens"},
+			dataType: "json",
+			success: function(data){
+				console.log(data);
+				var edittoken = data.query.tokens.csrftoken;
+				browser.tabs.query({
+					currentWindow: true,
+					active: true
+				}).then( function(tabs){
+					console.log(tabs[0].id);
+					browser.tabs.sendMessage(
+						tabs[0].id,
+						{command:"getSelection"}
+					).then(function(response) {
+						console.log(response);
+						if (response.data.length === 0) {
+							console.log(-2);
+							return -2;
+						}
+						var cardName = response.data;
+						console.log("cardName:\t"+cardName);
+						
+						var targetTitle = baseWikiPage.concat("",cardName);
+						
+						$.ajax({
+							type: "POST",
+							url: apiUrl,
+							data: {action: "edit", format: "json", title: targetTitle, appendtext: "\n\nhello world\n\n", token: edittoken},
+							success: function(data){
+								console.log(data);
+							}
+							
+						})
+					})
+				})
+				
+				
+			}
+			
+		})
 	},
 	
 	
