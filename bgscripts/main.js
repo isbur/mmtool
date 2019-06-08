@@ -142,8 +142,19 @@ function entryPoint() {
 }
 
 
-browser.runtime.onMessage.addListener(
-	(message) => {
+var listeners = {
+	
+	
+	onCommandHandler: function(command) {
+		if (command === "toggleCreateOrAddCard"){
+			entryPoint();
+		}
+		else if (command === "startCreatingCard"){
+			entryPoint();
+		}
+	},
+	
+	onMessageHandler: function(message){
 		console.log("Some message was received");
 		if (message.command === "start") {
 			entryPoint(null);
@@ -152,12 +163,11 @@ browser.runtime.onMessage.addListener(
 			console.log("Stoping scripts...");
 		}
 	}
-);
+	
+}
 
-browser.commands.onCommand.addListener(function onCommandHandler(command) {
-	  if (command == "toggleCreateOrAddCard") {
-		browser.commands.onCommand.removeListener(onCommandHandler)
-		entryPoint();
-	  }
-});
+
+browser.runtime.onMessage.addListener(listeners.onMessageHandler());
+
+browser.commands.onCommand.addListener(listeners.onCommandHandler());
 

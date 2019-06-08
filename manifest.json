@@ -47,6 +47,11 @@
 			"suggested_key": {
 				"default": "Alt+Shift+M"
 			}
+		},
+		"startCreatingCard": {
+			"suggested_key": {
+				"default": "Alt+V"
+			}
 		}
 	}
   
