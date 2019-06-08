@@ -5,6 +5,8 @@ const userName = "Isbur@mmtool";
 const password = "sf5vmfng5e1gp1hoi17jf9hpc5d9ddpq"
 const baseWikiPage = "Участник:Isbur/Комплексный анализ II/Карточки/"
 
+var auxiliaryStepsCompleted = false;
+
 
 console.log("test my nuts");
 var selObj = document.getSelection();
@@ -42,7 +44,7 @@ var jswikibot = {
 	},
 	
 	
-	createCard: function(){
+	editCard: function(textToAdd){
 		
 		$.ajax({
 			type: "GET",
@@ -74,7 +76,7 @@ var jswikibot = {
 						$.ajax({
 							type: "POST",
 							url: apiUrl,
-							data: {action: "edit", format: "json", title: targetTitle, appendtext: "\n\nhello world\n\n", token: edittoken},
+							data: {action: "edit", format: "json", title: targetTitle, appendtext: textToAdd, token: edittoken},
 							success: function(data){
 								console.log(data);
 							}
@@ -127,18 +129,12 @@ var MMTool = {
 }
 
 
-function entryPoint() {
+function fullIniialize() {
 	console.log("Starting scripts...")
 			
-	jswikibot.login()
+	jswikibot.login();
 	
-	browser.commands.onCommand.addListener(function(command) {
-	  if (command == "toggleCreateOrAddCard") {
-		console.log("toggling the feature!");
-		MMTool.contextMenu.createCard.start()
-	  }
-	});
-	
+	auxiliaryStepsCompleted = true;
 }
 
 
@@ -146,12 +142,13 @@ var listeners = {
 	
 	
 	onCommandHandler: function(command) {
-		if (command === "toggleCreateOrAddCard"){
+		if (command === "startCreatingCard"){
+			// two cases: first time use during the session and
 			entryPoint();
 		}
-		else if (command === "startCreatingCard"){
-			entryPoint();
-		}
+		//else if (command === "startCreatingCard"){
+		//	entryPoint();
+		//}
 	},
 	
 	onMessageHandler: function(message){
@@ -168,6 +165,5 @@ var listeners = {
 
 
 browser.runtime.onMessage.addListener(listeners.onMessageHandler());
-
 browser.commands.onCommand.addListener(listeners.onCommandHandler());
 

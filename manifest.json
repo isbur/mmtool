@@ -38,7 +38,7 @@
 	}],
   
 	"commands": {
-		"toggleCreateOrAddCard": {
+		"addSelectedText": {
 			"suggested_key": {
 				"default": "Alt+M"
 			}
