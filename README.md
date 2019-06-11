@@ -13,8 +13,8 @@ And the problem here is that it seems like there is no other option for self-stu
 * You can give your Bot credentials, created on this site, to the extension
 * You can select a so-called "base page" that's is used in a described below way
 * When activating the extension ("Turn On" in extension popup or some of the keyboard shortcuts used by the extension -- e.g. Alt+M, Alt+V, Alt+Shift+M):
-..* Select some text on page (say, some specific term, e.g. "normed space")
-..* Press "Create Card" (Alt+V)
+  * Select some text on page (say, some specific term, e.g. "normed space")
+  * Press "Create Card" (Alt+V)
 ....* An empty wiki subpage of *base page* will be created
 ..* Start surfing Internet for information about
 ....* Feature assumed to be added: automatically open new tab with the search query on Alt+V
