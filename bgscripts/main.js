@@ -8,14 +8,9 @@ const baseWikiPage = "Участник:Isbur/Комплексный анализ
 var auxiliaryStepsCompleted = false;
 
 
-console.log("test my nuts");
-var selObj = document.getSelection();
-console.log(selObj);
-console.log("oh they're sweet")
-
-
 var jswikibot = {
 	
+	cardName:"initialName",
 	
 	login: function(){
 		
@@ -44,6 +39,12 @@ var jswikibot = {
 	},
 	
 	
+	startCreatingCard: function(){
+		// sequence of requests to content script injected to browser tab
+		this.cardName = MMTool.currentTab.getSelection();
+		
+	},
+	
 	editCard: function(textToAdd){
 		
 		$.ajax({
@@ -54,40 +55,18 @@ var jswikibot = {
 			success: function(data){
 				console.log(data);
 				var edittoken = data.query.tokens.csrftoken;
-				browser.tabs.query({
-					currentWindow: true,
-					active: true
-				}).then( function(tabs){
-					console.log(tabs[0].id);
-					browser.tabs.sendMessage(
-						tabs[0].id,
-						{command:"getSelection"}
-					).then(function(response) {
-						console.log(response);
-						if (response.data.length === 0) {
-							console.log(-2);
-							return -2;
-						}
-						var cardName = response.data;
-						console.log("cardName:\t"+cardName);
-						
-						var targetTitle = baseWikiPage.concat("",cardName);
-						
-						$.ajax({
-							type: "POST",
-							url: apiUrl,
-							data: {action: "edit", format: "json", title: targetTitle, appendtext: textToAdd, token: edittoken},
-							success: function(data){
-								console.log(data);
-							}
-							
-						})
-					})
+				
+				var targetTitle = baseWikiPage.concat("",this.cardName);
+				
+				$.ajax({
+					type: "POST",
+					url: apiUrl,
+					data: {action: "edit", format: "json", title: targetTitle, appendtext: textToAdd, token: edittoken},
+					success: function(data){
+						console.log(data);
+					}	
 				})
-				
-				
 			}
-			
 		})
 	},
 	
@@ -98,9 +77,7 @@ var jswikibot = {
 }
 
 
-jswikibot.login()
-
-
+// Browser specific tasks
 var MMTool = {
 	contextMenu: {
 		createCard: {
@@ -125,6 +102,35 @@ var MMTool = {
 			
 			
 		}
+	},
+	
+	currentTab: {
+		
+		getSelection: function(){
+			
+			var returnValue;
+			
+			browser.tabs.query({
+				currentWindow: true,
+				active: true
+			}).then( function(tabs){
+				console.log(tabs[0].id);
+				browser.tabs.sendMessage(
+					tabs[0].id,
+					{command:"getSelection"}
+				).then(function(response) {
+					console.log(response);
+					if (response.data.length === 0) {
+						console.log(-2);
+						return -2;
+					}
+					returnValue = response.data;
+					console.log("gotSelectionText:\t"+returnValue);
+					return returnValue;
+				})
+			})
+		}
+		
 	}
 }
 
@@ -142,9 +148,15 @@ var listeners = {
 	
 	
 	onCommandHandler: function(command) {
-		if (command === "startCreatingCard"){
+		if (auxiliaryStepsCompleted === false) {
+			fullIniialize();
+			return;
+		}
+		if (command === "testCommand"){
 			// two cases: first time use during the session and
-			entryPoint();
+			console.log("test my nuts");
+			var testvar = MMTool.currentTab.getSelection();
+			console.log("oh they're sweet")
 		}
 		//else if (command === "startCreatingCard"){
 		//	entryPoint();
@@ -154,7 +166,7 @@ var listeners = {
 	onMessageHandler: function(message){
 		console.log("Some message was received");
 		if (message.command === "start") {
-			entryPoint(null);
+			fullIniialize();
 		}
 		else if (message.command === "stop") {
 			console.log("Stoping scripts...");
@@ -164,6 +176,7 @@ var listeners = {
 }
 
 
-browser.runtime.onMessage.addListener(listeners.onMessageHandler());
-browser.commands.onCommand.addListener(listeners.onCommandHandler());
+browser.runtime.onMessage.addListener((message) => {listeners.onMessageHandler(message)});
+browser.commands.onCommand.addListener((command) => {listeners.onCommandHandler(command)});
+
 
