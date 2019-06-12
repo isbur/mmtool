@@ -33,7 +33,7 @@
 	},
 	
 	"content_scripts": [{
-		"matches":["https://ru.wikiversity.org/* file:///C:/*"],
+		"matches":["<all_urls>"],
 		"js":["cscripts/selectioneer.js"]
 	}],
   
@@ -50,12 +50,12 @@
 		},
 		"startCreatingCard": {
 			"suggested_key": {
-				"default": "Alt+V"
+				"default": "Ctrl+Alt+V"
 			}
 		},
 		"testCommand": {
 			"suggested_key": {
-				"default": "Alt+T"
+				"default": "Ctrl+Alt+T"
 			}
 		}
 	}
