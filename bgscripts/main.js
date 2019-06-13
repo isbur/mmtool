@@ -3,7 +3,7 @@ import './jquery-3.4.1.js'
 const apiUrl = "https://ru.wikiversity.org/w/api.php";
 const userName = "Isbur@mmtool";
 const password = "sf5vmfng5e1gp1hoi17jf9hpc5d9ddpq"
-const baseWikiPage = "Участник:Isbur/MMToolTestPage"
+const baseWikiPage = "Участник:Isbur/MMToolTestPage/" // Please don't forget to add "/" to the end
 
 var auxiliaryStepsCompleted = false;
 
@@ -44,8 +44,14 @@ var jswikibot = {
 	startCreatingCard: function(){
 		// sequence of requests to content script injected to browser tab
 		return new Promise((resolve, reject) => {
-			MMTool.currentTab.getSelection().then((response)=>{this.cardName = response});
-			resolve(0);
+			MMTool.currentTab.getSelection().then((response)=>{
+				jswikibot.cardName = response
+				resolve({
+					errorCode: 0,
+					cardName: response
+				});
+			});
+			
 		});
 	},
 	
@@ -61,7 +67,7 @@ var jswikibot = {
 					console.log(data);
 					var edittoken = data.query.tokens.csrftoken;
 					
-					var targetTitle = baseWikiPage.concat("",this.cardName);
+					var targetTitle = baseWikiPage.concat("",jswikibot.cardName);
 					
 					$.ajax({
 						type: "POST",
@@ -75,11 +81,6 @@ var jswikibot = {
 			})
 		})
 	},
-	
-	
-	addToCard: function(){
-		
-	}
 }
 
 
@@ -167,13 +168,13 @@ var listeners = {
 		if (command === "testCommand"){
 			// two cases: first time use during the session and
 			console.log("test my nuts");
-			MMTool.currentTab.getSelection().then((response) => {console.log("Hey there!\t"+response)});
-			jswikibot.startCreatingCard();
-			jswikibot.editCard("\n\nhello world\n\n");
+			await jswikibot.startCreatingCard();
+			await jswikibot.editCard("\n\nhello world\n\n");
 			console.log("oh they're sweet");
 		}
 		else if (command === "startCreatingCard"){
-			jswikibot.startCreatingCard();
+			var response = await jswikibot.startCreatingCard();
+			window.alert("Successful card creation!\nCard name:\t"+response.cardName);
 		}
 	},
 	
