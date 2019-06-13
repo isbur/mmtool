@@ -3,7 +3,7 @@ import './jquery-3.4.1.js'
 const apiUrl = "https://ru.wikiversity.org/w/api.php";
 const userName = "Isbur@mmtool";
 const password = "sf5vmfng5e1gp1hoi17jf9hpc5d9ddpq"
-const baseWikiPage = "Участник:Isbur/Комплексный анализ II/Карточки/"
+const baseWikiPage = "Участник:Isbur/MMToolTestPage"
 
 var auxiliaryStepsCompleted = false;
 
@@ -15,58 +15,64 @@ var jswikibot = {
 	login: function(){
 		
 		var logintoken = "foo";
-		$.ajax({
-			type: "GET",
-			url: apiUrl,
-			data: {action: "query", format: "json", meta: "tokens", type: "login"},
-			dataType: "json",
-			success: function(data){
-				console.log(data);
-				logintoken = data.query.tokens.logintoken;
-				$.ajax({
-					type: "POST",
-					url: apiUrl,
-					data: {action: "login", format: "json", lgname: userName, lgpassword: password, lgtoken: logintoken},
-					dataType: "json",
-					success: function(data){
-						console.log(data);
-					}
-				})
-			}
+		return new Promise((resolve, reject) => {
+			$.ajax({
+				type: "GET",
+				url: apiUrl,
+				data: {action: "query", format: "json", meta: "tokens", type: "login"},
+				dataType: "json",
+				success: function(data){
+					console.log(data);
+					logintoken = data.query.tokens.logintoken;
+					$.ajax({
+						type: "POST",
+						url: apiUrl,
+						data: {action: "login", format: "json", lgname: userName, lgpassword: password, lgtoken: logintoken},
+						dataType: "json",
+						success: function(data){
+							console.log(data);
+							resolve(data);
+						}
+					})
+				}
+			})
 		})
-		
 		
 	},
 	
 	
 	startCreatingCard: function(){
 		// sequence of requests to content script injected to browser tab
-		this.cardName = MMTool.currentTab.getSelection();
-		
+		return new Promise((resolve, reject) => {
+			MMTool.currentTab.getSelection().then((response)=>{this.cardName = response});
+			resolve(0);
+		});
 	},
 	
 	editCard: function(textToAdd){
 		
-		$.ajax({
-			type: "GET",
-			url: apiUrl,
-			data: {action: "query", format: "json", meta: "tokens"},
-			dataType: "json",
-			success: function(data){
-				console.log(data);
-				var edittoken = data.query.tokens.csrftoken;
-				
-				var targetTitle = baseWikiPage.concat("",this.cardName);
-				
-				$.ajax({
-					type: "POST",
-					url: apiUrl,
-					data: {action: "edit", format: "json", title: targetTitle, appendtext: textToAdd, token: edittoken},
-					success: function(data){
-						console.log(data);
-					}	
-				})
-			}
+		return new Promise((resolve, reject) => {
+			$.ajax({
+				type: "GET",
+				url: apiUrl,
+				data: {action: "query", format: "json", meta: "tokens"},
+				dataType: "json",
+				success: function(data){
+					console.log(data);
+					var edittoken = data.query.tokens.csrftoken;
+					
+					var targetTitle = baseWikiPage.concat("",this.cardName);
+					
+					$.ajax({
+						type: "POST",
+						url: apiUrl,
+						data: {action: "edit", format: "json", title: targetTitle, appendtext: textToAdd, token: edittoken},
+						success: function(data){
+							console.log(data);
+						}	
+					})
+				}
+			})
 		})
 	},
 	
@@ -139,29 +145,36 @@ var MMTool = {
 function fullIniialize() {
 	console.log("Starting scripts...")
 			
-	jswikibot.login();
+	var loginPromise = new Promise((resolve, reject) => {
+		jswikibot.login().then(((response) =>{auxiliaryStepsCompleted = true;}));
+	})
 	
-	auxiliaryStepsCompleted = true;
+	loginPromise.then((response) => {resolve("Success")});
+	
+	return loginPromise;
+	
 }
 
 
 var listeners = {
 	
 	
-	onCommandHandler: function(command) {
+	onCommandHandler: async function(command) {
 		if (auxiliaryStepsCompleted === false) {
-			fullIniialize();
+			await fullIniialize();
 			return;
 		}
 		if (command === "testCommand"){
 			// two cases: first time use during the session and
 			console.log("test my nuts");
 			MMTool.currentTab.getSelection().then((response) => {console.log("Hey there!\t"+response)});
-			console.log("oh they're sweet")
+			jswikibot.startCreatingCard();
+			jswikibot.editCard("\n\nhello world\n\n");
+			console.log("oh they're sweet");
 		}
-		//else if (command === "startCreatingCard"){
-		//	entryPoint();
-		//}
+		else if (command === "startCreatingCard"){
+			jswikibot.startCreatingCard();
+		}
 	},
 	
 	onMessageHandler: function(message){
