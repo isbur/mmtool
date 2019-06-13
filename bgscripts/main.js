@@ -113,6 +113,16 @@ var MMTool = {
 	
 	currentTab: {
 		
+		getId: () => {
+			return new Promise(async function(resolve){
+				var tabs = await browser.tabs.query({
+					currentWindow: true,
+					active: true
+				})
+				resolve(tabs[0].id)
+			});
+		},
+		
 		getSelection: () => {
 			return new Promise(function(resolve, reject){
 				var returnValue;
@@ -137,9 +147,19 @@ var MMTool = {
 					})
 				})
 			});
-		}
+		},
 		
+		notify: async function(textToSend){
+			var targetTabId = await MMTool.currentTab.getId();
+			await browser.tabs.sendMessage(targetTabId, {
+				command: "notify",
+				message: textToSend
+			});
+			return new Promise((resolve) => {resolve(textToSend)})
+		}
 	}
+	
+
 }
 
 
@@ -165,17 +185,29 @@ var listeners = {
 			await fullIniialize();
 			return;
 		}
-		if (command === "testCommand"){
+		else if (command === "testCommand"){
 			// two cases: first time use during the session and
 			console.log("test my nuts");
-			await jswikibot.startCreatingCard();
-			await jswikibot.editCard("\n\nhello world\n\n");
+			//await jswikibot.startCreatingCard();
+			//await jswikibot.editCard("\n\nhello world\n\n");
+			var test = await MMTool.currentTab.notify("kjdkshbj");
+			console.log("TEST:\t" + test);
 			console.log("oh they're sweet");
 		}
 		else if (command === "startCreatingCard"){
 			var response = await jswikibot.startCreatingCard();
-			window.alert("Successful card creation!\nCard name:\t"+response.cardName);
+			MMTool.currentTab.notify("Successful card creation!\nCard path:\t"+baseWikiPage+response.cardName);
 		}
+		else if (command === "addSelectedText"){
+			console.log("STARTED ADDING SELECTED TEXT");
+			var textToAdd = await MMTool.currentTab.getSelection(); // defence from dumb input is needed to add
+			console.log(textToAdd);
+			var response = await jswikibot.editCard("\n\n"+textToAdd+"\n\n");
+			console.log(response);
+			//MMTool.notify("Successful card edit!\nCard path:\t"+baseWikiPage+response.cardName);//+"\nText was added:\n"+textToAdd);
+			MMTool.currentTab.notify("test");
+		}
+		MMTool.currentTab.notify("test");
 	},
 	
 	onMessageHandler: function(message){

@@ -34,18 +34,18 @@
 	
 	"content_scripts": [{
 		"matches":["<all_urls>"],
-		"js":["cscripts/selectioneer.js"]
+		"js":["cscripts/selectioneerAndNotifier.js"]
 	}],
   
 	"commands": {
 		"addSelectedText": {
 			"suggested_key": {
-				"default": "Alt+M"
+				"default": "Ctrl+Alt+A"
 			}
 		},
 		"finishCurrentCard": {
 			"suggested_key": {
-				"default": "Alt+Shift+M"
+				"default": "Ctrl+Alt+S"
 			}
 		},
 		"startCreatingCard": {
