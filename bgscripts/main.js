@@ -10,7 +10,7 @@ async function universalCommandHandler(command){
 		// Ctrl+Alt+T
 		case "testCommand":
 			console.log("test my nuts");
-			var test = await browserbot.currentTab.notify("kjdkshbj");
+			
 			console.log("TEST:\t" + test);
 			console.log("oh they're sweet");
 			break;
@@ -18,6 +18,7 @@ async function universalCommandHandler(command){
 		// Ctrl+Alt+V	
 		case "startCreatingCard":
 			cardName = await browserbot.currentTab.getSelection();
+			var test = await browserbot.currentTab.notify("kjdkshbj");
 			break;
 			
 		// Ctrl+Alt+M	
@@ -28,7 +29,7 @@ async function universalCommandHandler(command){
 			//let response = await jswikibot.editCard("\n\n"+textToAdd+"\n\n");
 			console.log(response);
 			//MMTool.notify("Successful card edit!\nCard path:\t"+baseWikiPage+response.cardName);//+"\nText was added:\n"+textToAdd);
-			browserbot.currentTab.notify("test");
+			var test = await browserbot.currentTab.notify("kjdkshbj");
 			break;
 			
 		default:

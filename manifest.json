@@ -23,15 +23,15 @@
 	"content_security_policy": "script-src 'self' 'unsafe-eval' https://*.wikipedia.org https://ru.wikiversity.org; object-src 'self' https://*.wikipedia.org",
 	
 	"web_accessible_resources": [
-		"cscripts/notifier.js",
-		"cscripts/selectioneer.js"
+		"cscripts/selectioneer.js",
+		"cscripts/notifier.js"
 	],
   
-  "browser_action": {
-    "default_icon": "icons/logo_mm_32.ico",
-    "default_title": "MMTool",
-    "default_popup": "popup/turn_on_turn_off.html"
-  },
+	"browser_action": {
+		"default_icon": "icons/logo_mm_32.ico",
+		"default_title": "MMTool",
+		"default_popup": "popup/turn_on_turn_off.html"
+	},
   
 	"background":{
 		"page": "bgscripts/bgpage.html"
@@ -39,7 +39,7 @@
 	
 	"content_scripts": [{
 		"matches":["<all_urls>"],
-		"js":["cscripts/selectioneerAndNotifier.js"]
+		"js":["cscripts/onMessageHandler.js"]
 	}],
   
 	"commands": {

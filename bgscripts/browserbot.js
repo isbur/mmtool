@@ -29,11 +29,26 @@ export var currentTab = {
 		);
 	},
 	
+	/*
 	notify: function(textToSend){
 		browser.notifications.create({
 			type: "basic",
 			title: "MMTool",
 			message: textToSend
 		})
+	}
+	*/
+	notify: (textToSend) => {
+		return new Promise(
+			async function(resolve){
+				let targetTabId = await currentTab.getId();
+				let tabResponse = await browser.tabs.sendMessage(
+					targetTabId,
+					{command:"notify",
+					message: textToSend}
+				);
+				resolve("Success!");
+			}
+		);
 	}
 }
