@@ -106,29 +106,30 @@ var MMTool = {
 	
 	currentTab: {
 		
-		getSelection: function(){
-			
-			var returnValue;
-			
-			browser.tabs.query({
-				currentWindow: true,
-				active: true
-			}).then( function(tabs){
-				console.log(tabs[0].id);
-				browser.tabs.sendMessage(
-					tabs[0].id,
-					{command:"getSelection"}
-				).then(function(response) {
-					console.log(response);
-					if (response.data.length === 0) {
-						console.log(-2);
-						return -2;
-					}
-					returnValue = response.data;
-					console.log("gotSelectionText:\t"+returnValue);
-					return returnValue;
+		getSelection: () => {
+			return new Promise(function(resolve, reject){
+				var returnValue;
+				console.log("Here I am!");
+				browser.tabs.query({
+					currentWindow: true,
+					active: true
+				}).then( function(tabs){
+					console.log(tabs[0].id);
+					browser.tabs.sendMessage(
+						tabs[0].id,
+						{command:"getSelection"}
+					).then(function(response) {
+						console.log(response);
+						if (response.data.length === 0) {
+							console.log(-2);
+							reject(-2);
+						}
+						returnValue = response.data;
+						console.log("gotSelectionText:\t"+returnValue);
+						resolve(returnValue);
+					})
 				})
-			})
+			});
 		}
 		
 	}
@@ -155,7 +156,7 @@ var listeners = {
 		if (command === "testCommand"){
 			// two cases: first time use during the session and
 			console.log("test my nuts");
-			var testvar = MMTool.currentTab.getSelection();
+			MMTool.currentTab.getSelection().then((response) => {console.log("Hey there!\t"+response)});
 			console.log("oh they're sweet")
 		}
 		//else if (command === "startCreatingCard"){

@@ -9,8 +9,9 @@ browser.runtime.onMessage.addListener(
 		if(request.command = "getSelection"){
 			console.log("I'm alive!");
 			var selObj = window.getSelection();
-			console.log(selObj());
-			sendResponse({data: selObj.toString()});
+			response = selObj.toString()
+			console.log(response);
+			sendResponse({data: response});
 		} 
 		else {
 			sendResponse({});
