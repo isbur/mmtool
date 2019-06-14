@@ -1,5 +1,5 @@
 export var currentTab = {
-		
+	
 	getId: () => {
 		return new Promise(async function(resolve){
 			var tabs = await browser.tabs.query({
@@ -29,26 +29,43 @@ export var currentTab = {
 		);
 	},
 	
+	MMToolNotification: "",
 	/*
-	notify: function(textToSend){
-		browser.notifications.create({
-			type: "basic",
-			title: "MMTool",
-			message: textToSend
-		})
+	notify: async function(id, textToSend){
+	//notify: async function(textToSend){
+		//let MMToolNotificationId = "MMToolNotification"
+		//if (currentTab.MMToolNotification !== ""){
+		//	await browser.notifications.clear(id);
+		//} 
+		await browser.notifications.clear(id);
+		await browser.notifications.create(
+			//MMToolNotificationId,
+			id,
+			{
+				type: "basic",
+				title: "MMTool",
+				message: textToSend
+			}
+		);
+		return new Promise ((resolve)=>{resolve("Success!")});
 	}
 	*/
-	notify: (textToSend) => {
+	
+	
+	//notify: (textToSend) => {
+	notify: (senderCommand, textToSend) => {
 		return new Promise(
 			async function(resolve){
 				let targetTabId = await currentTab.getId();
 				let tabResponse = await browser.tabs.sendMessage(
 					targetTabId,
 					{command:"notify",
+					title: senderCommand,
 					message: textToSend}
 				);
 				resolve("Success!");
 			}
 		);
 	}
+	
 }

@@ -1,5 +1,5 @@
 import {apiUrl, userName, password, baseWikiPage} from './settings.js'
-import {cardName} from './main.js'
+
 
 export function login(){
 		
@@ -30,7 +30,7 @@ export function login(){
 	}
 	
 	
-export function editCard(textToAdd){
+export function editCard(cardName, textToAdd){
 		
 		return new Promise((resolve, reject) => {
 			$.ajax({

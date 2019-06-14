@@ -6,35 +6,38 @@ import * as browserbot from './browserbot.js'
 
 export var cardName
 async function universalCommandHandler(command){
+	let message = "default notification";
 	switch(command){
 		// Ctrl+Alt+T
 		case "testCommand":
 			console.log("test my nuts");
-			
-			console.log("TEST:\t" + test);
+			message = "test";
 			console.log("oh they're sweet");
 			break;
 			
 		// Ctrl+Alt+V	
 		case "startCreatingCard":
 			cardName = await browserbot.currentTab.getSelection();
-			var test = await browserbot.currentTab.notify("kjdkshbj");
+			message = "Successful card creation!\nCard path:\t"+baseWikiPage+cardName;
 			break;
 			
 		// Ctrl+Alt+M	
 		case "addSelectedText":
 			console.log("STARTED ADDING SELECTED TEXT");
-			//let textToAdd = await browserbot.currentTab.getSelection(); // defence from dumb input is needed to add
-			console.log(textToAdd);
-			//let response = await jswikibot.editCard("\n\n"+textToAdd+"\n\n");
+			let textToAdd = await browserbot.currentTab.getSelection(); // defence from dumb input is needed to add
+			console.log("TEXTTOADD"+textToAdd);
+			let response = jswikibot.editCard(cardName, "\n\n"+textToAdd+"\n\n");
+			console.log("RESPONSE");
 			console.log(response);
-			//MMTool.notify("Successful card edit!\nCard path:\t"+baseWikiPage+response.cardName);//+"\nText was added:\n"+textToAdd);
-			var test = await browserbot.currentTab.notify("kjdkshbj");
+			message = "Successful card edit!\nCard path:\t"+baseWikiPage+cardName+"\nText was added:\n"+textToAdd;
+			//console.log("MESSAGE"+message);
 			break;
 			
 		default:
 			console.log("Command was not found.");
 	}
+	//await browserbot.currentTab.notify(message);
+	browserbot.currentTab.notify(command, message);
 }
 
 

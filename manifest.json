@@ -45,7 +45,7 @@
 	"commands": {
 		"addSelectedText": {
 			"suggested_key": {
-				"default": "Ctrl+Alt+A"
+				"default": "Ctrl+Alt+M"
 			}
 		},
 		"finishCurrentCard": {
