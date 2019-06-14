@@ -7,6 +7,8 @@ import * as browserbot from './browserbot.js'
 export var cardName
 async function universalCommandHandler(command){
 	let message = "default notification";
+	let textToAdd;
+	let response;
 	switch(command){
 		// Ctrl+Alt+T
 		case "testCommand":
@@ -22,20 +24,20 @@ async function universalCommandHandler(command){
 			// Add link to parent page
 			//// Form link text
 			let targetTitle = baseWikiPage + cardName
-			let textToAdd = "\n\n[[" + targetTitle + "]]"
+			textToAdd = "\n\n[[" + targetTitle + "]]"
 			//// Check whether such link already exists
 			////// Get parent page's wikitext
 			let parentPageWikitext = jswikibot.getPageText("");
-			let response = jswikibot.editCard("",)
+			response = jswikibot.editCard("",)
 			message = "Successful card creation!\nCard path:\t"+baseWikiPage+cardName;
 			break;
 			
 		// Ctrl+Alt+M	
 		case "addSelectedText":
 			console.log("STARTED ADDING SELECTED TEXT");
-			let textToAdd = await browserbot.currentTab.getSelection(); // defence from dumb input is needed to add
+			textToAdd = await browserbot.currentTab.getSelection(); // defence from dumb input is needed to add
 			console.log("TEXTTOADD"+textToAdd);
-			let response = jswikibot.editCard(cardName, "\n\n"+textToAdd+"\n\n");
+			response = jswikibot.editCard(cardName, "\n\n"+textToAdd+"\n\n");
 			console.log("RESPONSE");
 			console.log(response);
 			message = "Successful card edit!\nCard path:\t"+baseWikiPage+cardName+"\nText was added:\n"+textToAdd;
@@ -52,7 +54,8 @@ async function universalCommandHandler(command){
 
 // First we need to login
 browser.commands.onCommand.addListener(async function initialOnCommandHandler() {
-	await jswikibot.login();
+	let response = await jswikibot.login();
+	console.log(response);
 	browser.commands.onCommand.removeListener(initialOnCommandHandler);
 });
 // Now we are ready to execute commands

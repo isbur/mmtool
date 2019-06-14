@@ -25,11 +25,12 @@ function getToken(desiredType){
 }
 
 
-export async function login(){
+export function login(){
 
-		return new Promise((resolve, reject) => {
-			let logintoken = await getToken("login");
-			let data = {action: "login", format: "json", lgname: userName, lgpassword: password, lgtoken: logintoken}
+		return new Promise(async function (resolve) {
+			let response = await getToken("login");
+			let logintoken = response.query.tokens.logintoken;
+			let data = {action: "login", format: "json", lgname: userName, lgpassword: password, lgtoken: logintoken};
 			resolve(typicalAjax("POST", data));
 		})
 		
