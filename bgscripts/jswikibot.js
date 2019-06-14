@@ -36,7 +36,8 @@ export function login(){
 		
 	}
 	
-	
+
+// Needs to be refactored	
 export function editCard(cardName, textToAdd){
 		
 	return new Promise((resolve, reject) => {
@@ -65,6 +66,9 @@ export function editCard(cardName, textToAdd){
 }
 
 
-export async function getPageText(cardName) {
-	
+export function getPageText(cardName) {
+	return new Promise((resolve) => {
+		let data = {action: "parse", title: baseWikiPage+cardName, prop: "wikitext"}
+		resolve(typicalAjax("GET", data));
+	});
 }

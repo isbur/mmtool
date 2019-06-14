@@ -27,8 +27,9 @@ async function universalCommandHandler(command){
 			textToAdd = "\n\n[[" + targetTitle + "]]"
 			//// Check whether such link already exists
 			////// Get parent page's wikitext
-			let parentPageWikitext = jswikibot.getPageText("");
-			response = jswikibot.editCard("",)
+			let parentPageWikitext = await jswikibot.getPageText("");
+			console.log("parentPageWikitext:\t"+parentPageWikitext);
+			//response = jswikibot.editCard("",)
 			message = "Successful card creation!\nCard path:\t"+baseWikiPage+cardName;
 			break;
 			
@@ -55,7 +56,6 @@ async function universalCommandHandler(command){
 // First we need to login
 browser.commands.onCommand.addListener(async function initialOnCommandHandler() {
 	let response = await jswikibot.login();
-	console.log(response);
 	browser.commands.onCommand.removeListener(initialOnCommandHandler);
 });
 // Now we are ready to execute commands
