@@ -25,30 +25,12 @@ function getToken(desiredType){
 }
 
 
-export function login(){
-		
-		var logintoken = "foo";
+export async function login(){
+
 		return new Promise((resolve, reject) => {
-			$.ajax({
-				type: "GET",
-				url: apiUrl,
-				data: {action: "query", format: "json", meta: "tokens", type: "login"},
-				dataType: "json",
-				success: function(data){
-					console.log(data);
-					logintoken = data.query.tokens.logintoken;
-					$.ajax({
-						type: "POST",
-						url: apiUrl,
-						data: {action: "login", format: "json", lgname: userName, lgpassword: password, lgtoken: logintoken},
-						dataType: "json",
-						success: function(data){
-							console.log(data);
-							resolve(data);
-						}
-					})
-				}
-			})
+			let logintoken = await getToken("login");
+			let data = {action: "login", format: "json", lgname: userName, lgpassword: password, lgtoken: logintoken}
+			resolve(typicalAjax("POST", data));
 		})
 		
 	}
