@@ -17,7 +17,16 @@ async function universalCommandHandler(command){
 			
 		// Ctrl+Alt+V	
 		case "startCreatingCard":
+			// Set card name
 			cardName = await browserbot.currentTab.getSelection();
+			// Add link to parent page
+			//// Form link text
+			let targetTitle = baseWikiPage + cardName
+			let textToAdd = "\n\n[[" + targetTitle + "]]"
+			//// Check whether such link already exists
+			////// Get parent page's wikitext
+			let parentPageWikitext = jswikibot.getPageText("");
+			let response = jswikibot.editCard("",)
 			message = "Successful card creation!\nCard path:\t"+baseWikiPage+cardName;
 			break;
 			
