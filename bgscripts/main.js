@@ -19,16 +19,21 @@ async function universalCommandHandler(command){
 			
 		// Ctrl+Alt+V	
 		case "startCreatingCard":
+		
+		
 			// Set card name
 			cardName = await browserbot.currentTab.getSelection();
-			// Add link to parent page
+			// Add card link to parent page
 			//// Form link text
 			let targetTitle = baseWikiPage + cardName
 			textToAdd = "\n\n[[" + targetTitle + "]]"
 			//// Check whether such link already exists
+			jswikibot.check
 			////// Get parent page's wikitext
-			let parentPageWikitext = await jswikibot.getPageText("");
-			console.log("parentPageWikitext:\t"+parentPageWikitext);
+			//let parentPageWikitext = jswikibot.getPageText("");	// For some reason await disables notifications
+			jswikibot.getPageText("").then((parentPageWikitext)=>{
+				console.log("parentPageWikitext:\t"+parentPageWikitext);
+			})
 			//response = jswikibot.editCard("",)
 			message = "Successful card creation!\nCard path:\t"+baseWikiPage+cardName;
 			break;
@@ -55,7 +60,11 @@ async function universalCommandHandler(command){
 
 // First we need to login
 browser.commands.onCommand.addListener(async function initialOnCommandHandler() {
-	let response = await jswikibot.login();
+	// But check also whether we alredy are logged in
+	let response = await jswikibot.getUserinfo();
+	if ("anon" in response.query.userinfo.name){
+		await jswikibot.login();
+	}
 	browser.commands.onCommand.removeListener(initialOnCommandHandler);
 });
 // Now we are ready to execute commands
